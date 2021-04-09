@@ -62,7 +62,7 @@ def build_input_data(data):
 
 		# Omit any fields not to be used for training and predictions
 		if key in par['exclude_keys']:
-			pass
+			continue
 
 		input_data.append(data[key])
 

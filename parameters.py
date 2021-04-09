@@ -38,4 +38,4 @@ par['ann_hyper'] = {
 # List out shorter names for data headers as keys
 par['input_keys'] = ['pH', 'turb', 'DO', 'CHLA', 'CDOM', 'cond', 'TRPN', 'FC', 'BOD', 'T']
 par['data_keys'] = par['input_keys'] + ['WQI']
-par['exclude_keys'] = ['FC', 'BOD']
+par['exclude_keys'] = ['FC', 'BOD', 'CHLA', 'turb', 'T']
