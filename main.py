@@ -22,6 +22,7 @@ from utils import regularize_dataset, unregularize_WQI, build_input_data, error_
 
 
 def load_data(fn):
+	""" Load the dataset from file into a set of arrays """
 
 	# List out headers in the file
 	raw_keys = ['(SEN) pH ', '(SEN) Turbidity NTU', '(SEN) DO ppm',
@@ -50,8 +51,9 @@ def load_data(fn):
 	return data
 
 
-
 def run_algorithm(method, xdata, ydata, hyperparams=None):
+	""" Given a method (MLR, Ada, SVR, ANN) with optional hyperparameters
+		along with input and output data, evaluate the method """
 
 	# Print out conditions for this run
 	print('Method: {}'.format(method))
@@ -110,6 +112,10 @@ def run_algorithm(method, xdata, ydata, hyperparams=None):
 	print('\n\n')
 
 
+
+##########################################################################
+
+
 # Load and preprocess the dataset
 raw_data = load_data('./set_03-test.csv')
 norm_data = regularize_dataset(raw_data)
@@ -117,7 +123,6 @@ norm_data = regularize_dataset(raw_data)
 # Build the input and output data arrays for use in predictions
 input_data = build_input_data(norm_data)
 output_data = norm_data['WQI']
-
 
 # Run each algorithm
 run_algorithm('MLR', input_data, output_data)
