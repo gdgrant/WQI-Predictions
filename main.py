@@ -17,7 +17,7 @@ from sklearn.neural_network import MLPRegressor
 
 from parameters import par
 from wqi import compute_wqi
-from utils import normalize_dataset, unnormalize_WQI, build_input_data, error_metric, iterate_grid_search, fit_and_predict
+from utils import regularize_dataset, unregularize_WQI, build_input_data, error_metric, iterate_grid_search, fit_and_predict
 
 
 
@@ -90,10 +90,10 @@ def run_algorithm(method, xdata, ydata, hyperparams=None):
 		ptrain, ptest = fit_and_predict(reg, xtrain, ytrain, xtest)
 
 		# Un-regularize the WQI data for meaningful error metrics
-		ytest  = unnormalize_WQI(ytest)
-		ptest  = unnormalize_WQI(ptest)
-		ytrain = unnormalize_WQI(ytrain)
-		ptrain = unnormalize_WQI(ptrain)
+		ytest  = unregularize_WQI(ytest)
+		ptest  = unregularize_WQI(ptest)
+		ytrain = unregularize_WQI(ytrain)
+		ptrain = unregularize_WQI(ptrain)
 
 		# Obtain a siute of error metrics and record
 		train_error = error_metric(ytrain, ptrain)
@@ -112,7 +112,7 @@ def run_algorithm(method, xdata, ydata, hyperparams=None):
 
 # Load and preprocess the dataset
 raw_data = load_data('./set_03-test.csv')
-norm_data = normalize_dataset(raw_data)
+norm_data = regularize_dataset(raw_data)
 
 # Build the input and output data arrays for use in predictions
 input_data = build_input_data(norm_data)

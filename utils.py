@@ -7,45 +7,51 @@
 import numpy as np
 import sklearn.metrics as metrics
 from itertools import product
+
 from parameters import par
 
 
 ##########################################################################
 
-class NormWQI:
+class RegularizeWQI:
+	""" This class is meant to regularize the WQI data and store the relevant
+		numbers for un-regularizing the data after prediction using a regressor """
 
-	def normalize_WQI(self, x):
+	def regularize_WQI(self, x):
 		self.xmin = x.min()
 		self.xmax = x.max()
 		return 0.6 * (x-self.xmin) / (self.xmax-self.xmin) + 0.2
 
-	def unnormalize_WQI(self, y):
+	def unregularize_WQI(self, y):
 		return ((y - 0.2) / 0.6) * (self.xmax-self.xmin) + self.xmin
 
-nWQI = NormWQI()
+# Create a WQI regularizer object
+rWQI = RegularizeWQI()
+
 
 ##########################################################################
 
-def normalize_data(x):
+
+def regularize_data(x):
 	""" Regularize the given data """
 	return 0.6 * (x-x.min()) / (x.max()-x.min()) + 0.2
 
 
-def normalize_dataset(raw_data):
+def regularize_dataset(raw_data):
 	""" Regularize the dataset for each data type """
 
 	norm_data = {}
 	for key in par['data_keys']:
 		if key == 'WQI':
-			norm_data[key] = nWQI.normalize_WQI(raw_data[key])
+			norm_data[key] = rWQI.regularize_WQI(raw_data[key])
 		else:
-			norm_data[key] = normalize_data(raw_data[key])
+			norm_data[key] = regularize_data(raw_data[key])
 	return norm_data
 
 
-def unnormalize_WQI(wqi):
+def unregularize_WQI(wqi):
 	""" Inverse the regularization for WQI """
-	return nWQI.unnormalize_WQI(wqi)
+	return rWQI.unregularize_WQI(wqi)
 
 
 def build_input_data(data):
@@ -54,7 +60,7 @@ def build_input_data(data):
 	input_data = []
 	for key in par['input_keys']:
 
-		# Remove any fields not to be used for training and predictions
+		# Omit any fields not to be used for training and predictions
 		if key in par['exclude_keys']:
 			pass
 
@@ -80,7 +86,9 @@ def error_metric(x, y):
 
 	return error
 
+
 ##########################################################################
+
 
 def iterate_grid_search(hyperparams):
 	""" Given a dictionary of lists of hyperparameters, yield dictionaries of
@@ -95,8 +103,9 @@ def iterate_grid_search(hyperparams):
 		yield '{} of {}'.format(i+1, grid_total), hp_dict
 
 
-
 def fit_and_predict(reg, xtrain, ytrain, xtest):
+	""" Given a regression model, training data, and test data, fit the
+		provided model and generate some model predictions """
 
 	# Fit the provided model
 	reg.fit(xtrain, ytrain)
