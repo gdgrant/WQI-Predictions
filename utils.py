@@ -1,3 +1,9 @@
+#############################
+### WQI Prediction        ###
+### Code by Gregory Grant ###
+### April 9, 2021         ###
+#############################
+
 import numpy as np
 import sklearn.metrics as metrics
 from itertools import product
@@ -47,6 +53,11 @@ def build_input_data(data):
 
 	input_data = []
 	for key in par['input_keys']:
+
+		# Remove any fields not to be used for training and predictions
+		if key in par['exclude_keys']:
+			pass
+
 		input_data.append(data[key])
 
 	input_data = np.stack(input_data, axis=1)

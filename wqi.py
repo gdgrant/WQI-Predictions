@@ -1,3 +1,9 @@
+#############################
+### WQI Prediction        ###
+### Code by Gregory Grant ###
+### April 9, 2021         ###
+#############################
+
 import numpy as np
 
 

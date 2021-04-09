@@ -1,3 +1,9 @@
+#############################
+### WQI Prediction        ###
+### Code by Gregory Grant ###
+### April 9, 2021         ###
+#############################
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -120,10 +126,10 @@ for index, hyperparams in iterate_grid_search(par['ada_hyper']):
 	print('Grid index {}'.format(index))
 	run_algorithm('ADA', input_data, output_data, hyperparams)
 
-for index, hyperparams in iterate_grid_search(par['svr_hyper']):
-	print('Grid index {}'.format(index))
-	run_algorithm('SVR', input_data, output_data, hyperparams)
+# for index, hyperparams in iterate_grid_search(par['svr_hyper']):
+# 	print('Grid index {}'.format(index))
+# 	run_algorithm('SVR', input_data, output_data, hyperparams)
 
-for index, hyperparams in iterate_grid_search(par['ann_hyper']):
-	print('Grid index {}'.format(index))
-	run_algorithm('ANN', input_data, output_data, hyperparams)
+# for index, hyperparams in iterate_grid_search(par['ann_hyper']):
+# 	print('Grid index {}'.format(index))
+# 	run_algorithm('ANN', input_data, output_data, hyperparams)
