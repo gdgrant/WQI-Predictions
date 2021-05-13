@@ -56,7 +56,6 @@ def run_algorithm(method, xdata, ydata, hyperparams=None):
 		along with input and output data, evaluate the method """
 
 	# Print out conditions for this run
-	print('Method: {}'.format(method))
 	if hyperparams is not None:
 		for k in hyperparams.keys():
 			print('> {} = {}'.format(k, hyperparams[k]))
@@ -104,13 +103,19 @@ def run_algorithm(method, xdata, ydata, hyperparams=None):
 		train_record.append(train_error)
 		test_record.append(test_error)
 
-	# Summarize the recorded error metrics for this method		
+	# Summarize the recorded error metrics for this method	
+	metrics = {}	
 	for key in ['mae', 'rmse', 'r2']:
 		a = np.mean([train_record[i][key] for i in range(par['n_folds'])])
 		b = np.mean([test_record [i][key] for i in range(par['n_folds'])])
 		print('{:>4} | Training = {:>6.3f} | Testing = {:>6.3f}'.format(key, a, b))
+
+		metrics[key+'_training'] = a
+		metrics[key+'_testing'] = b
+
 	print('\n\n')
 
+	return metrics
 
 
 ##########################################################################
@@ -124,17 +129,26 @@ norm_data = regularize_dataset(raw_data)
 input_data = build_input_data(norm_data)
 output_data = norm_data['WQI']
 
-# Run each algorithm
-run_algorithm('MLR', input_data, output_data)
+# raise Exception('Still need to do regularization testing/training split')
 
-for index, hyperparams in iterate_grid_search(par['ada_hyper']):
-	print('Grid index {}'.format(index))
-	run_algorithm('ADA', input_data, output_data, hyperparams)
+# Run each algorithm in sequence
+methods = ['MLR', 'ADA', 'ANN', 'SVR']
+for method in methods:
 
-# for index, hyperparams in iterate_grid_search(par['svr_hyper']):
-# 	print('Grid index {}'.format(index))
-# 	run_algorithm('SVR', input_data, output_data, hyperparams)
+	# Open a file to save the results
+	with open('./output/{}-results.csv'.format(method), 'w') as f:
 
-# for index, hyperparams in iterate_grid_search(par['ann_hyper']):
-# 	print('Grid index {}'.format(index))
-# 	run_algorithm('ANN', input_data, output_data, hyperparams)
+		f.write('Method:,{}\n'.format(method))
+		f.write('Iteration,MAE Training,RMSE Training,R2 Training,MAE Testing,RMSE Testing,R2 Testing,Hyperparameters')
+
+		for [i, i0], hyperparams in iterate_grid_search(method):
+			print('{} | Grid index {} of {}'.format(method, i, i0))
+			results = run_algorithm(method, input_data, output_data, hyperparams)
+
+			f.write('\n' + str(i))
+			keys = ['mae_training', 'rmse_training', 'r2_training',\
+				'mae_testing', 'rmse_testing', 'r2_testing']
+			for key in keys:
+				f.write(',{:.5f}'.format(results[key]))
+
+			f.write(',' + ' | '.join(['{}={}'.format(k, v) for k, v in hyperparams.items()]))

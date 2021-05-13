@@ -1,0 +1,55 @@
+MLR:
+
+
+ADA:
+  loss:
+    vals: ['linear', 'square', 'exponential']
+
+  n_estimators:
+    vals: [25, 50, 100, 200]
+
+  learning_rate:
+    vals: [0.5, 1., 2.]
+
+
+SVR:
+  kernel:
+    vals: ['linear', 'sigmoid', 'poly', 'rbf']
+
+  C:
+    # vals: [0.01, 0.1, 1, 10, 100, 500]
+    vals: [0.1, 1, 10, 100, 500, 1000, 2500, 5000]
+  
+  epsilon:
+    # vals: [0.0001, 0.001, 0.01, 0.1, 1.]
+    vals: [0.001, 0.01, 0.1, 1, 10, 20, 30,40, 50, 60, 70, 80, 90, 100]
+
+  degree:
+    vals: [1, 2, 3, 4]
+    cond: ['kernel', 'poly']
+  
+  gamma:
+    # vals: [0.01, 0.1, 1., 10., 20.]
+    vals: [0.001, 0.01, 0.1, 1, 10, 20, 30, 40, 50, 'auto', 'scale']
+    cond: ['kernel', 'rbf', 'poly', 'sigmoid']
+  
+
+ANN:
+  static_params:
+    max_iter: 5000
+    early_stopping: True
+    n_iter_no_change: 100
+
+  activation:
+    vals: ['identity', 'logistic', 'tanh', 'relu']
+  
+  solver:
+    vals: ['lbfgs', 'sgd', 'adam']
+
+  hidden_layer_sizes:
+    vals: [ [10,],   [10, 10],    [10, 10, 10],
+            [20,],   [20, 20],    [20, 20, 20],
+            [50,],   [50, 50],    [50, 50, 50],
+           [100,], [100, 100], [100, 100, 100]]
+
+
