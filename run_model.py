@@ -138,7 +138,7 @@ methods = ['MLR', 'ADA', 'ANN']#, 'SVR']
 for method in methods:
 
 	# Open a file to save the results
-	with open('./output/{}-results.csv'.format(method), 'w') as f:
+	with open('./output/{}-{}fold-results.csv'.format(method, par['n_folds']), 'w') as f:
 
 		f.write('Method:,{}\n'.format(method))
 		f.write('Iteration,MAE Training,RMSE Training,R2 Training,MAE Testing,RMSE Testing,R2 Testing,,Hyperparameters')
