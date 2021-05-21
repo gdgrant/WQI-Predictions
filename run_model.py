@@ -134,7 +134,7 @@ def run_algorithm(method, raw_data, hyperparams=None):
 raw_data = load_data('./set_03-test.csv')
 
 # Run each algorithm in sequence
-methods = ['MLR', 'ADA', 'ANN', 'SVR']
+methods = ['MLR', 'ADA', 'ANN']#, 'SVR']
 for method in methods:
 
 	# Open a file to save the results
