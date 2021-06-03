@@ -1,7 +1,7 @@
 #############################
 ### WQI Prediction        ###
 ### Code by Gregory Grant ###
-### May 13, 2021          ###
+### June 3, 2021          ###
 #############################
 
 import yaml
@@ -9,7 +9,7 @@ import yaml
 par = {}
 
 # Number of folds for K-folds cross-validation
-par['n_folds'] = 10
+par['n_folds'] = 209 # 5, 10, 209 (209=LOO)
 
 # List out shorter names for data headers as keys
 par['input_keys'] = ['pH', 'turb', 'DO', 'CHLA', 'CDOM', 'cond', 'TRPN', 'FC', 'BOD', 'T']

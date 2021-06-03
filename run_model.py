@@ -1,7 +1,7 @@
 #############################
 ### WQI Prediction        ###
 ### Code by Gregory Grant ###
-### May 13, 2021          ###
+### June 3, 2021          ###
 #############################
 
 import numpy as np
@@ -60,9 +60,13 @@ def run_algorithm(method, raw_data, hyperparams=None):
 		for k in hyperparams.keys():
 			print('> {} = {}'.format(k, hyperparams[k]))
 
-	# Record across folds
-	train_record = []
-	test_record = []
+	# Record results across folds
+	records = {
+		'ytest'	: [],
+		'ptest'	: [],
+		'ytrain' : [],
+		'ptrain' : []
+	}
 
 	# Iterate over folds (WQI is used as a dummy index source)
 	kfold = KFold(par['n_folds'], shuffle=True, random_state=1)
@@ -104,19 +108,27 @@ def run_algorithm(method, raw_data, hyperparams=None):
 		# for meaningful error metrics
 		ytest, ptest, ytrain, ptrain = ND.unnormalize_WQI(ytest, ptest, ytrain, ptrain)
 
-		# Obtain a siute of error metrics and record
-		train_error = error_metric(ytrain, ptrain)
-		test_error = error_metric(ytest, ptest)
-
 		# Record this fold's results
-		train_record.append(train_error)
-		test_record.append(test_error)
+		records['ytest'].append(ytest)
+		records['ptest'].append(ptest)
+		records['ytrain'].append(ytrain)
+		records['ptrain'].append(ptrain)
+
+	# Combine all recorded data for analysis
+	ytest  = np.concatenate(records['ytest'], axis=0)
+	ptest  = np.concatenate(records['ptest'], axis=0)
+	ytrain = np.concatenate(records['ytrain'], axis=0)
+	ptrain = np.concatenate(records['ptrain'], axis=0)
+
+	# Obtain a suite of error metrics and record
+	train_error = error_metric(ytrain, ptrain)
+	test_error = error_metric(ytest, ptest)
 
 	# Summarize the recorded error metrics for this method	
 	metrics = {}	
 	for key in ['mae', 'rmse', 'r2']:
-		a = np.mean([train_record[i][key] for i in range(par['n_folds'])])
-		b = np.mean([test_record[i][key] for i in range(par['n_folds'])])
+		a = train_error[key]
+		b = test_error[key]
 		print('{:>4} | Training = {:>6.3f} | Testing = {:>6.3f}'.format(key, a, b))
 
 		metrics[key+'_training'] = a
@@ -135,10 +147,11 @@ raw_data = load_data('./set_03-test.csv')
 
 # Run each algorithm in sequence
 methods = ['MLR', 'ADA', 'ANN']#, 'SVR']
+methods = ['SVR']
 for method in methods:
 
 	# Open a file to save the results
-	with open('./output/{}-{}fold-results.csv'.format(method, par['n_folds']), 'w') as f:
+	with open('./output/{}_poly-{}fold-results.csv'.format(method, par['n_folds']), 'w') as f:
 
 		f.write('Method:,{}\n'.format(method))
 		f.write('Iteration,MAE Training,RMSE Training,R2 Training,MAE Testing,RMSE Testing,R2 Testing,,Hyperparameters')

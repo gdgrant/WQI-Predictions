@@ -1,9 +1,11 @@
 # WQI-Predictions
 
-This code implements predictions of water quality based on various water parameters.  Note that the data for this implementation is not included in the repository.
+This code implements predictions of water quality based on various water parameters.  Note that the data used for optimizing these models is not included in the repository.
 
-This codebase consists of four files:
+This codebase consists of six files:
 - `main.py` -- This is the entry point into the code.  Run this file.
 - `utils.py` -- This file holds utility functions for processing data and models.
 - `wqi.py` -- This file holds a set of functions for evaluating the actual water quality index (WQI) from provided data.
-- `parameters.py` -- Any parameters for loading or using data, plus any parameters for model optimization, are kept here.
+- `parameters.py` -- Any settings for loading or using data, plus importing of the grid search hyperparameters, are kept here.
+- `grid_search.yaml` -- This file holds the grid search hyperparamters to be used when running models.
+- `analysis.py` -- Once desired models have been run, this file may be used to select for the best results.

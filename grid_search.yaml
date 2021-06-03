@@ -1,50 +1,42 @@
 MLR:
-
+  # MLR has no parameters to search
 
 ADA:
   loss:
     vals: ['linear', 'square', 'exponential']
 
   n_estimators:
-    vals: [1, 2, 5, 8, 10, 25, 50, 75, 100, 200, 300, 400]
+    vals: [1, 2, 5, 8, 10, 25, 50, 75, 100, 200, 300]
 
   learning_rate:
-    vals: [0.0001, 0.001, 0.01, 0.1, 0.2, 0.25, 0.5, 1., 2., 4.]
+    vals: [0.0001, 0.001, 0.01, 0.1, 0.2, 0.25, 0.5, 1.]
 
 
 SVR:
+
   kernel:
     vals: ['linear', 'sigmoid', 'poly', 'rbf']
 
   C:
-    # vals: [0.01, 0.1, 1, 10, 100, 500]
-    vals: [0.1, 1, 10, 100, 500, 1000, 2500, 5000]
+    vals: [0.001, 0.1, 1, 10, 100, 500, 1000, 2500]
   
   epsilon:
-    # vals: [0.0001, 0.001, 0.01, 0.1, 1.]
-    vals: [0.001, 0.01, 0.1, 1, 10, 20, 30,40, 50, 60, 70, 80, 90, 100]
+    vals: [0.00001, 0.0001, 0.001, 0.005, 0.01, 0.1, 1.]
 
   degree:
-    vals: [1, 2, 3, 4]
-    cond: ['kernel', 'poly']
+    vals: [2, 3, 4]
+    cond: ['kernel', 'poly']  # 'degree' is only searched when kernel=poly
   
   gamma:
-    # vals: [0.01, 0.1, 1., 10., 20.]
-    vals: [0.001, 0.01, 0.1, 1, 10, 20, 30, 40, 50, 'auto', 'scale']
-    cond: ['kernel', 'rbf', 'poly', 'sigmoid']
+    vals: [0.0001, 0.001, 0.01, 0.1, 1, 2, 10, 20, 'auto', 'scale']
+    cond: ['kernel', 'rbf', 'poly', 'sigmoid'] # 'gamma' is only searched when kernel is in [rbf, poly, sigmoid]
   
 
 ANN:
   static_params:
-    # max_iter: 5000
+    max_iter: 15000
     early_stopping: True
-    # n_iter_no_change: 100
-
-  n_iter_no_change:
-    vals: [50, 100, 200]
-
-  max_iter:
-    vals: [2500, 5000, 10000, 15000]
+    n_iter_no_change: 100
 
   activation:
     vals: ['identity', 'logistic', 'tanh', 'relu']
