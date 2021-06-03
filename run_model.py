@@ -146,26 +146,32 @@ def run_algorithm(method, raw_data, hyperparams=None):
 raw_data = load_data('./set_03-test.csv')
 
 # Run each algorithm in sequence
-methods = ['MLR', 'ADA', 'ANN']#, 'SVR']
-methods = ['SVR']
+methods = ['MLR', 'ADA', 'ANN', 'SVR']
 for method in methods:
 
 	# Open a file to save the results
 	with open('./output/{}_poly-{}fold-results.csv'.format(method, par['n_folds']), 'w') as f:
 
+		# Add some headers to the saved file
 		f.write('Method:,{}\n'.format(method))
 		f.write('Iteration,MAE Training,RMSE Training,R2 Training,MAE Testing,RMSE Testing,R2 Testing,,Hyperparameters')
 
+		# Iterate over the grid search hyperparameters
 		for [i, i0], hyperparams in iterate_grid_search(method):
+
+			# Show the current index in the grid search
 			print('{} | Grid index {} of {}'.format(method, i, i0))
+
+			# Fit the model with the current hyperparamters and obtain the results
 			results = run_algorithm(method, raw_data, hyperparams)
 
+			# Write the model results to file
 			f.write('\n' + str(i))
-			keys = ['mae_training', 'rmse_training', 'r2_training',\
-				'mae_testing', 'rmse_testing', 'r2_testing']
+			keys = ['mae_training', 'rmse_training', 'r2_training', 'mae_testing', 'rmse_testing', 'r2_testing']
 			for key in keys:
 				f.write(',{:.5f}'.format(results[key]))
 
+			# Write the model hyperparameters to file
 			f.write(',,' + ' | '.join(['{}={}'.format(k, v) for k, v in hyperparams.items()]))
 
 print('\n\nAll models complete!')
